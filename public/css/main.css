@@ -1,0 +1,382 @@
+/* ===== Design tokens ===== */
+:root {
+  --bg-base: #0f0f12;
+  --bg-elevated: #18181c;
+  --bg-card: #1e1e24;
+  --bg-input: #141418;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(99, 179, 237, 0.5);
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --accent: #63b3ed;
+  --accent-hover: #7ec8f7;
+  --success: #4ade80;
+  --success-muted: #22c55e;
+  --warning: #fbbf24;
+  --error: #f87171;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --transition: 0.2s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  margin: 0;
+  padding: 1.25rem;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Layout & header ===== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  min-height: 3rem;
+}
+
+.header-unit {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  text-align: center;
+  padding: 0.5rem 1rem;
+  background: rgba(99, 179, 237, 0.1);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(99, 179, 237, 0.2);
+}
+
+.header-unit.empty {
+  color: var(--warning);
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
+.config-warn {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--warning);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.config-warn::before {
+  content: "⚠ ";
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* ===== Status badges (fixed corners) ===== */
+.wifi-corner,
+.sync-corner {
+  position: fixed;
+  top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  z-index: 100;
+  transition: var(--transition);
+}
+
+.wifi-corner {
+  right: 1rem;
+  color: var(--success);
+}
+
+.wifi-corner.off {
+  color: var(--text-muted);
+}
+
+.wifi-corner svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.sync-corner {
+  left: 1rem;
+  color: var(--success);
+}
+
+.sync-corner.pending {
+  color: var(--warning);
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+/* ===== Tabs ===== */
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  margin-bottom: 1.25rem;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.tabs button {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tabs button:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tabs button.active {
+  color: var(--text-primary);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+/* ===== Status line ===== */
+.status {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  min-height: 1.5em;
+  padding: 0.35rem 0;
+}
+
+.status.error {
+  color: var(--error);
+}
+
+.status.scanning {
+  color: var(--warning);
+}
+
+/* ===== Content views ===== */
+.view {
+  display: none;
+  animation: fadeIn 0.25s ease;
+}
+
+.view.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===== Cards & panels ===== */
+#liveWrap,
+#sessionsWrap {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+/* ===== Tables ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th,
+td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+}
+
+th {
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+}
+
+tr {
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+tr:last-child {
+  border-bottom: none;
+}
+
+tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+td {
+  color: var(--text-primary);
+}
+
+.table-address {
+  font-family: "SF Mono", "Monaco", "Consolas", monospace;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ===== Empty state ===== */
+.empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 3rem 2rem;
+  font-size: 0.95rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border);
+}
+
+/* ===== Buttons ===== */
+.scan-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bg-base);
+  background: linear-gradient(135deg, var(--accent) 0%, #5a9fd9 100%);
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(99, 179, 237, 0.3);
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.scan-btn:hover {
+  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent) 100%);
+  box-shadow: 0 4px 12px rgba(99, 179, 237, 0.35);
+  transform: translateY(-1px);
+}
+
+.scan-btn:active {
+  transform: translateY(0);
+}
+
+.scan-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===== Settings form ===== */
+.settings-form {
+  max-width: 32rem;
+}
+
+.settings-group {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.settings-group legend {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  padding: 0 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.settings-form label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.settings-form label:last-of-type {
+  margin-bottom: 0;
+}
+
+.settings-form label span {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.4rem;
+}
+
+.settings-form input {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.settings-form input::placeholder {
+  color: var(--text-muted);
+}
+
+.settings-form input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.15);
+}
+
+.settings-status {
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  min-height: 1.4em;
+  padding: 0.5rem 0;
+}
+
+.settings-status.ok {
+  color: var(--success);
+}
+
+.settings-status.error {
+  color: var(--error);
+}
