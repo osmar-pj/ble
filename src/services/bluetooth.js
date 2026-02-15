@@ -2,6 +2,7 @@ import { spawn } from 'child_process';
 import { config, state } from '../config/index.js';
 import { runCommand } from '../utils/runCommand.js';
 import { publishBeacons } from './mqtt.js';
+import { createQueuedSession, enqueue } from './queue.js';
 
 /** Dispositivos vistos: address -> { address, name, rssi, firstSeen, lastSeen } */
 const knownDevices = new Map();
@@ -90,14 +91,16 @@ export async function refreshDeviceList() {
     // Registrar sesiones cerradas: dispositivos que estaban y ahora están stale
     for (const [address, d] of knownDevices) {
       if (d.lastSeen <= staleLimit) {
-        state.sessions.push({
+        const session = {
           address: d.address,
           name: d.name,
           firstSeen: d.firstSeen,
           lastSeen: d.lastSeen,
           durationMs: d.lastSeen - d.firstSeen,
-        });
+        };
+        state.sessions.push(session);
         if (state.sessions.length > state.maxSessions) state.sessions = state.sessions.slice(-state.maxSessions);
+        enqueue([createQueuedSession(session)]).catch((e) => console.warn('Error encolando sesión:', e.message));
         knownDevices.delete(address);
       }
     }
@@ -122,16 +125,18 @@ export async function refreshDeviceList() {
     const toRemoveAfterUpdate = [];
     for (const [address, d] of knownDevices) {
       if (d.lastSeen <= staleLimit) {
-        state.sessions.push({
+        const session = {
           address: d.address,
           name: d.name,
           firstSeen: d.firstSeen,
           lastSeen: d.lastSeen,
           durationMs: d.lastSeen - d.firstSeen,
-        });
+        };
+        state.sessions.push(session);
         if (state.sessions.length > state.maxSessions) {
           state.sessions = state.sessions.slice(-state.maxSessions);
         }
+        enqueue([createQueuedSession(session)]).catch((e) => console.warn('Error encolando sesión:', e.message));
         toRemoveAfterUpdate.push(address);
       }
     }

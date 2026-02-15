@@ -30,6 +30,7 @@ export function publishBeacons(devices) {
 
   try {
     const payload = JSON.stringify({
+      unitId: config.unitId ?? config.mqtt.clientId ?? 'unknown',
       count: devices.length,
       devices: devices.map((d) => ({ address: d.address, name: d.name, rssi: d.rssi ?? null })),
       ts: new Date().toISOString(),

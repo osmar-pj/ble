@@ -19,3 +19,6 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Cola local de sync (sesiones pendientes)
+data/
